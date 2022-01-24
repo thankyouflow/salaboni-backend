@@ -1,12 +1,13 @@
 import client from "../../client";
-import { NEW_MESSAGE } from "../../constants";
+import {NEW_MESSAGE} from "../../constants";
 import pubsub from "../../pubsub";
-import { protectedResolver } from "../../users/users.utils";
+import {protectedResolver} from "../../users/users.utils";
+import {uploadToS3} from "../../shared/shared.utils";
 
 export default {
   Mutation: {
     sendMessage: protectedResolver(
-      async (_, { payload, roomId, userId }, { loggedInUser }) => {
+      async (_, {payload, roomId, userId, type, photo}, {loggedInUser}) => {
         let room = null;
         if (userId) {
           const user = await client.user.findUnique({
@@ -53,9 +54,15 @@ export default {
             };
           }
         }
+
+        if (photo) {
+          payload = await uploadToS3(photo, loggedInUser.id, "uploads");
+        }
+
         const message = await client.message.create({
           data: {
             payload,
+            type,
             room: {
               connect: {
                 id: room.id,
@@ -68,7 +75,7 @@ export default {
             },
           },
         });
-        pubsub.publish(NEW_MESSAGE, { roomUpdates: { ...message } });
+        pubsub.publish(NEW_MESSAGE, {roomUpdates: {...message}});
         return {
           ok: true,
         };

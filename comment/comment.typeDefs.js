@@ -21,6 +21,7 @@ export default gql`
   img:       String
   group:     Group!
   groupId:   Int!
+  star:   Float
   createdAt: String!
   updatedAt: String!
 }

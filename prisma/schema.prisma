@@ -13,13 +13,16 @@ generator client {
 
 model User {
   id        Int      @id @default(autoincrement())
+  nickname String
   firstName String
   lastName  String?
   username  String   @unique
   email     String   @unique
+  phoneNumber     Int
   password  String
   comments  Comment[]
-  location  String
+  entX  String
+  entY  String
   post     Post[]
   postComment     PostComment[]
   stay      Int?
@@ -28,27 +31,32 @@ model User {
   certification  Boolean  @default(false)
   rooms     Room[]
   Message   Message[]
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupId   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Group {
   id        Int      @id @default(autoincrement())
-  name  String
-  adderss   Address[]
-  post      Post[]
+  name      String
+  addersses   Address[]
+  posts     Post[]
+  users      User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Address {
   id        Int      @id @default(autoincrement())
-  location  String
+  entX  String
+  entY  String
   comments  Comment[]
   users  User[]
   img       String?
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   groupId   Int
+  star      Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -101,6 +109,7 @@ model Room {
 
 model Message {
   id        Int      @id @default(autoincrement())
+  type      Int //0 text 1 img
   payload   String
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
