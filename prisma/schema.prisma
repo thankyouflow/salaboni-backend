@@ -26,8 +26,8 @@ model User {
   post     Post[]
   postComment     PostComment[]
   stay      Int?
-  adderss     Address    @relation(fields: [adderssId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  adderssId   Int
+  item     Item    @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  itemId   Int
   certification  Boolean  @default(false)
   rooms     Room[]
   Message   Message[]
@@ -40,15 +40,18 @@ model User {
 model Group {
   id        Int      @id @default(autoincrement())
   name      String
-  addersses   Address[]
+  items   Item[]
   posts     Post[]
   users      User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Address {
+model Item {
   id        Int      @id @default(autoincrement())
+  address1  String
+  address2  String
+  type      Int
   entX  String
   entY  String
   comments  Comment[]
@@ -66,8 +69,8 @@ model Comment {
   payload   String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    Int
-  adderss     Address    @relation(fields: [adderssId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  adderssId   Int
+  item     Item    @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  itemId   Int
   check   Int  @default(0) //1 삭제 2 신고
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

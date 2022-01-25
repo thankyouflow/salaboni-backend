@@ -6,23 +6,10 @@ export default gql`
     payload:   String!
     user:      User!
     userId:    Int!
-    adderss:     Address!
+    adderss:     Item!
     adderssId:   Int!
     check:   Int!
     createdAt: String!
     updatedAt: String!
   }
-
-  type Address {
-  id:        Int!
-  location:  String!
-  comments:  [Comment]
-  users:  [User]
-  img:       String
-  group:     Group!
-  groupId:   Int!
-  star:   Float
-  createdAt: String!
-  updatedAt: String!
-}
 `;

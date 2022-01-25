@@ -19,7 +19,7 @@ ADD COLUMN     "password" TEXT NOT NULL,
 ADD COLUMN     "username" TEXT NOT NULL;
 
 -- CreateTable
-CREATE TABLE "Address" (
+CREATE TABLE "Item" (
     "id" SERIAL NOT NULL,
     "location" TEXT NOT NULL,
     "img" TEXT,
@@ -79,7 +79,7 @@ CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 ALTER TABLE "Comment" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD FOREIGN KEY ("adderssId") REFERENCES "Address"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD FOREIGN KEY ("adderssId") REFERENCES "Item"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

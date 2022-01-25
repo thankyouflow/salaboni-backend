@@ -29,7 +29,7 @@ export default gql`
   type Group {
   id:        Int!
   name:      String!
-  addersses:   [Address]
+  addersses:   [Item]
   posts:     [Post]
   users:      [User]
   createdAt: String!

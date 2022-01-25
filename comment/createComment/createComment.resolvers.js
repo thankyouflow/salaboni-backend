@@ -6,7 +6,7 @@ export default {
     createComment: protectedResolver(
       async (_, {location, addressId, payload}, {loggedInUser}) => {
         if (addressId) {
-          const ok = await client.address.findUnique({
+          const ok = await client.Item.findUnique({
             where: {
               id: addressId,
             },
@@ -17,12 +17,12 @@ export default {
           if (!ok) {
             return {
               ok: false,
-              error: "Address not found.",
+              error: "Item not found.",
             };
           }
         } else {
           const name = location.split(' ')[2]
-          addressId = await client.address.create({
+          addressId = await client.Item.create({
             data: {
               location,
               group: {
@@ -40,7 +40,7 @@ export default {
         const result = await client.comment.create({
           data: {
             payload,
-            address: {
+            Item: {
               connect: {
                 id: addressId,
               },

@@ -15,7 +15,7 @@ export default gql`
     post:     [Post]
     postComment:     [PostComment]
     stay:      Int
-    adderss:     Address!
+    adderss:     Item!
     adderssId:   Int!
     certification:  Boolean!
     rooms:     [Room]
