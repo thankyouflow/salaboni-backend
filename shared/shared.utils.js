@@ -47,8 +47,9 @@ export const uploadToS3 = async (file, userId, folderName) => {
   return Location;
 };
 
-export const geoDataApi = async (query, coordinate) => {
-  const url = coordinate ? `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}&coordinate=${encodeURI(coordinate)}` : `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}`
+export const geoDataApi = async (query, x, y) => {
+  const coordinate = `${x},${y}`
+  const url = x ? `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}&coordinate=${encodeURI(coordinate)}` : `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}`
   const result = await fetch(url, {
     method: "GET",
     headers: {
@@ -59,7 +60,8 @@ export const geoDataApi = async (query, coordinate) => {
   return result.json()
 };
 
-export const polygonDataApi = async (coordinate) => {
+export const polygonDataApi = async (x,y) => {
+  const coordinate = `${x},${y}`
   const result = await fetch(`http://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&point=${encodeURI(coordinate)}&format=json&type=both&key=${process.env.OPEN_GEO_KEY}`, {
     method: "GET"
   });

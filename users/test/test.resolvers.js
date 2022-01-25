@@ -10,7 +10,7 @@ export default {
     test: async () => {
       // console.log(getDistanceFromLatLonInKm(parseFloat('127.9425086'), parseFloat('37.3344701'), parseFloat('127.105406'), parseFloat('37.3595669')))
 
-      const jsonResult = await polygonDataApi('127.9425,37.33401')
+      const jsonResult = await polygonDataApi('127.9425','37.33401')
       console.log(jsonResult.response.result[0].text)
       console.log(await geoDataApi(jsonResult.response.result[0].text))
       // const temp = await roadNameApi(1, 10, jsonResult.response.result[0].text)
