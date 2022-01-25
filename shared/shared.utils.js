@@ -48,12 +48,20 @@ export const uploadToS3 = async (file, userId, folderName) => {
 };
 
 export const geoDataApi = async (query, coordinate) => {
-  const result = await fetch(`https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}&query=${encodeURI(coordinate)}`, {
+  const url = coordinate ? `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}&coordinate=${encodeURI(coordinate)}` : `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURI(query)}`
+  const result = await fetch(url, {
     method: "GET",
     headers: {
       'X-NCP-APIGW-API-KEY-ID': process.env.X_NCP_APIGW_API_KEY_ID,
       'X-NCP-APIGW-API-KEY': process.env.X_NCP_APIGW_API_KEY,
     },
+  });
+  return result.json()
+};
+
+export const polygonDataApi = async (coordinate) => {
+  const result = await fetch(`http://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&point=${encodeURI(coordinate)}&format=json&type=both&key=${process.env.OPEN_GEO_KEY}`, {
+    method: "GET"
   });
   return result.json()
 };
