@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import fetch from "node-fetch";
+import convert from "xml-js";
 
 AWS.config.update({
   credentials: {
@@ -60,7 +61,7 @@ export const geoDataApi = async (query, x, y) => {
   return result.json()
 };
 
-export const polygonDataApi = async (x,y) => {
+export const polygonDataApi = async (x, y) => {
   const coordinate = `${x},${y}`
   const result = await fetch(`http://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&point=${encodeURI(coordinate)}&format=json&type=both&key=${process.env.OPEN_GEO_KEY}`, {
     method: "GET"
@@ -80,6 +81,21 @@ export const locaionApi = async (admCd, rnMgtSn, udrtYn, buldMnnm, buldSlno) => 
     method: "GET",
   });
   return result.json()
+};
+
+export const buildingTypeApi = async (admCd1, admCd2, mtYn, bun, gi) => {
+
+  const requestUrl = `http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?serviceKey=AyWMa4zyn1AE083fQU1%2FrWoxy56SSMaIRblbnLwM5a%2FDucs6X4M8tS%2FgJ7X7Jh9A5%2Fju8tbvwZFUYpPwAUO2MQ%3D%3D&sigunguCd=${encodeURI(admCd1)}&bjdongCd=${encodeURI(admCd2)}&platGbCd=${encodeURI(mtYn)}&bun=${encodeURI(bun.padStart(4,'0'))}&ji=${encodeURI(gi ? gi.padStart(4,'0') : '0000')}&numOfRows=50&pageNo=1`;
+
+  const result = await fetch(requestUrl, {
+    method: "GET",
+  }).then(res => res.text())
+    .then(data => {
+      const result = convert.xml2js(data, {compact: true, spaces: 4});
+      return result.response.body.items.item;
+    })
+    .catch(err => console.log(err));
+  return result
 };
 
 export const getDistanceFromLatLonInKm = (lat1, lng1, lat2, lng2) => {

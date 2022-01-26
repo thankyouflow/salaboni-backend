@@ -8,6 +8,6 @@ type createCommentResult {
   }
 
   type Mutation {
-    createComment(location: String, addressId: Int, payload: String!): createCommentResult!
+    createComment(roadAddr: String, addressId: Int, payload: String!): createCommentResult!
   }
 `;

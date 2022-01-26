@@ -37,8 +37,10 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
     "stoppable": "^1.1.0",
-    "upgrade": "^1.1.0"
+    "upgrade": "^1.1.0",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",

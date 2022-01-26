@@ -1,10 +1,12 @@
 import client from "../../client";
 import {protectedResolver} from "../../users/users.utils";
+import {geoDataApi, roadNameApi} from "../../shared/shared.utils";
 
 export default {
   Mutation: {
     createComment: protectedResolver(
-      async (_, {location, addressId, payload}, {loggedInUser}) => {
+      async (_, {roadAddr, addressId, payload}, {loggedInUser}) => {
+        const typeList = ['아파트', '오피스텔', '주택']
         if (addressId) {
           const ok = await client.Item.findUnique({
             where: {
@@ -21,10 +23,27 @@ export default {
             };
           }
         } else {
-          const name = location.split(' ')[2]
+          let type = ''
+          const roadName = await roadNameApi(1, 10, roadAddr)
+          const jibunAddr = roadName.results.juso[0].jibunAddr
+          const buildingType = await buildingTypeApi(roadName.results.juso[0].admCd.substr(0, 5), roadName.results.juso[0].admCd.substr(5), roadName.results.juso[0].mtYn, roadName.results.juso[0].lnbrMnnm, roadName.results.juso[0].lnbrSlno)
+          for (let num in buildingType) {
+            for (let checkNum in typeList) {
+              if (buildingType[num].etcPurps._text.indexOf(typeList[checkNum]) > -1) {
+                type = typeList[checkNum];
+                break
+              }
+            }
+          }
+          const geoData = await geoDataApi(roadAddr)
+          const name = jibunAddr.split(' ')[2]
           addressId = await client.Item.create({
             data: {
-              location,
+              type,
+              jibunAddr,
+              roadAddr,
+              entX: geoData.addresses[0].x,
+              entY: geoData.addresses[0].y,
               group: {
                 connectOrCreate: {
                   where: {
@@ -35,7 +54,8 @@ export default {
                   },
                 },
               },
-            }}).id;
+            }
+          }).id;
         }
         const result = await client.comment.create({
           data: {

@@ -49,11 +49,11 @@ model Group {
 
 model Item {
   id        Int      @id @default(autoincrement())
-  address1  String
-  address2  String
-  type      Int
-  entX  String
-  entY  String
+  jibunAddr  String
+  roadAddr  String
+  type      String  //주택, 오피스텔, 아파트
+  entX  Float
+  entY  Float
   comments  Comment[]
   users  User[]
   img       String?
