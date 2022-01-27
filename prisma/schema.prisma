@@ -51,7 +51,7 @@ model Item {
   id        Int      @id @default(autoincrement())
   jibunAddr  String
   roadAddr  String
-  type      String  //주택, 오피스텔, 아파트
+  type      String[]
   entX  Float
   entY  Float
   comments  Comment[]

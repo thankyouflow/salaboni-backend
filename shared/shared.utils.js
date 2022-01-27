@@ -70,6 +70,7 @@ export const polygonDataApi = async (x, y) => {
 };
 
 export const roadNameApi = async (currentPage, countPerPage, keyword) => {
+  console.log(`https://www.juso.go.kr/addrlink/addrLinkApi.do?confmKey=${process.env.ROAD_NAME_KEY}&currentPage=${encodeURI(currentPage)}&countPerPage=${encodeURI(countPerPage)}&keyword=${encodeURI(keyword)}&resultType=json`)
   const result = await fetch(`https://www.juso.go.kr/addrlink/addrLinkApi.do?confmKey=${process.env.ROAD_NAME_KEY}&currentPage=${encodeURI(currentPage)}&countPerPage=${encodeURI(countPerPage)}&keyword=${encodeURI(keyword)}&resultType=json`, {
     method: "GET",
   });

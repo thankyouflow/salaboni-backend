@@ -23,39 +23,45 @@ export default {
             };
           }
         } else {
-          let type = ''
+          let type = []
           const roadName = await roadNameApi(1, 10, roadAddr)
-          const jibunAddr = roadName.results.juso[0].jibunAddr
-          const buildingType = await buildingTypeApi(roadName.results.juso[0].admCd.substr(0, 5), roadName.results.juso[0].admCd.substr(5), roadName.results.juso[0].mtYn, roadName.results.juso[0].lnbrMnnm, roadName.results.juso[0].lnbrSlno)
-          for (let num in buildingType) {
-            for (let checkNum in typeList) {
-              if (buildingType[num].etcPurps._text.indexOf(typeList[checkNum]) > -1) {
-                type = typeList[checkNum];
-                break
+          if (roadName.length == 1) {
+            const jibunAddr = roadName.results.juso[0].jibunAddr
+            const buildingType = await buildingTypeApi(roadName.results.juso[0].admCd.substr(0, 5), roadName.results.juso[0].admCd.substr(5), roadName.results.juso[0].mtYn, roadName.results.juso[0].lnbrMnnm, roadName.results.juso[0].lnbrSlno)
+            if (buildingType.length) {
+              for (let num in buildingType) {
+                type.push(buildingType[num].etcPurps._text)
               }
+            } else {
+              type.push(buildingType.etcPurps._text)
             }
-          }
-          const geoData = await geoDataApi(roadAddr)
-          const name = jibunAddr.split(' ')[2]
-          addressId = await client.Item.create({
-            data: {
-              type,
-              jibunAddr,
-              roadAddr,
-              entX: geoData.addresses[0].x,
-              entY: geoData.addresses[0].y,
-              group: {
-                connectOrCreate: {
-                  where: {
-                    name,
-                  },
-                  create: {
-                    name,
+            const geoData = await geoDataApi(roadAddr)
+            const name = jibunAddr.split(' ')[2]
+            addressId = await client.Item.create({
+              data: {
+                type,
+                jibunAddr,
+                roadAddr,
+                entX: geoData.addresses[0].x,
+                entY: geoData.addresses[0].y,
+                group: {
+                  connectOrCreate: {
+                    where: {
+                      name,
+                    },
+                    create: {
+                      name,
+                    },
                   },
                 },
-              },
-            }
-          }).id;
+              }
+            }).id;
+          } else {
+            return {
+              ok: false,
+              error: "Wrong address.",
+            };
+          }
         }
         const result = await client.comment.create({
           data: {

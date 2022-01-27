@@ -17,4 +17,12 @@ export default gql`
   createdAt: String!
   updatedAt: String!
 }
+  type juso {
+    roadAddrPart1: String!
+    admCd: String!
+    rnMgtSn: String!
+    udrtYn: String!
+    buldMnnm: String!
+    buldSlno: String!
+}
 `;
